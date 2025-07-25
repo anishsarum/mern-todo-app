@@ -1,0 +1,35 @@
+services:
+  # Frontend service
+  frontend:
+    build:
+      context: ./frontend # Path to your frontend Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend # Frontend depends on backend being available
+
+  # Backend service
+  backend:
+    build:
+      context: ./backend # Path to your backend Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      # Pass backend environment variables from .env file
+      MONGO_URI: mongodb://mongodb:27017/todos_db # 'mongodb' is the service name below
+      PORT: 5001
+    depends_on:
+      - mongodb # Backend depends on database
+
+  # MongoDB database service
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db # Persist data
+
+volumes:
+  mongodb_data: # Define the volume

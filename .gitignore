@@ -1,0 +1,47 @@
+ Node.js and NPM/Yarn/PNPM - General
+node_modules
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Build artifacts for both frontend and backend
+frontend/dist/
+backend/dist/
+
+# Development/Local-only files
+*.local
+.env # Crucial: Contains sensitive environment variables
+.env.development.local
+.env.test.local
+.env.production.local
+.DS_Store # macOS specific
+npm-debug.log* # Redundant, but good to have a specific entry for global logs
+
+# Docker specific files
+# Exclude cached images/build contexts
+.dockerignore # If you want to explicitly keep it out, though it's usually tracked
+docker-compose.override.yml # If you use a local override for docker-compose.yml
+.docker-buildkit-cache/
+.docker/buildx/cache/
+
+# Editor/IDE specific files (VS Code, IntelliJ, etc.)
+.vscode/ # VS Code specific settings/files
+!.vscode/extensions.json # Keep this if you want recommended extensions to be tracked
+.idea/ # IntelliJ IDEA specific files
+*.iml # IntelliJ IDEA module files
+
+# Testing/Coverage reports
+coverage/
+.nyc_output/
+
+# Logs (redundant with *.log but more specific)
+logs/
+*.log
+
+# Temp files
+*.tmp
+*.bak
+*.swp # Vim swap files
