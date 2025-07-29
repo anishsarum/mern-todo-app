@@ -1,34 +1,49 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
+import { useTodos } from './hooks/useTodos';
+import { TodoForm, TodoList } from './components';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const { todos, loading, error, addTodo, toggleTodo, deleteTodo } = useTodos();
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div
+      style={{
+        fontFamily: 'Inter, sans-serif',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        minHeight: '100vh',
+        backgroundColor: '#f4f7f6',
+        padding: '20px',
+        boxSizing: 'border-box',
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: 'white',
+          padding: '30px',
+          borderRadius: '15px',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+          maxWidth: '600px',
+          width: '100%',
+          boxSizing: 'border-box',
+        }}
+      >
+        <h1
+          style={{ textAlign: 'center', color: '#333', marginBottom: '25px' }}
+        >
+          My MERN Stack To-Do List
+        </h1>
+        <TodoForm onAdd={addTodo} /> {/* Pass addTodo function to the form */}
+        <TodoList
+          todos={todos}
+          onToggle={toggleTodo}
+          onDelete={deleteTodo}
+          loading={loading}
+          error={error}
+        />{' '}
+        {/* Pass data and functions to the list */}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   );
 }
 

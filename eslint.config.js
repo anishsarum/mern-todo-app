@@ -9,20 +9,27 @@ export default tseslint.config(
   },
   {
     files: ['frontend/**/*.{ts,tsx}'],
-    extends: [...tseslint.configs.recommended],
+    extends: [
+      ...tseslint.configs.recommended,
+      // You might also have eslint-plugin-react rules here from your Vite setup
+      // For example: pluginReactConfig, (if you added it before)
+      // If you're using prettier, you might add: eslintPluginPrettierRecommended,
+    ],
     languageOptions: {
       parserOptions: {
-        project: './frontend/tsconfig.json',
+        projectService: true, // <--- CHANGE THIS LINE
+        // project: './frontend/tsconfig.json', // <--- REMOVE OR COMMENT OUT THIS LINE
         tsconfigRootDir: import.meta.dirname,
       },
     },
   },
   {
-    files: ['backend/**/*.{ts,js}'],
+    files: ['backend/**/*.{ts,js}'], // Note: if you have .js files in backend, make sure they are linted as JS, not TS
     extends: [...tseslint.configs.recommended],
     languageOptions: {
       parserOptions: {
-        project: './backend/tsconfig.json',
+        projectService: true, // <--- CHANGE THIS LINE
+        // project: './backend/tsconfig.json', // <--- REMOVE OR COMMENT OUT THIS LINE
         tsconfigRootDir: import.meta.dirname,
       },
     },
