@@ -14,17 +14,18 @@ app.use(cors()); // Allow your frontend to talk to your backend
 app.use(express.json()); // To parse JSON bodies from requests
 
 // Connect to MongoDB
-mongoose.connect(mongoUri)
-    .then(() => console.log('MongoDB connected successfully'))
-    .catch(err => console.error('MongoDB connection error:', err));
+mongoose
+  .connect(mongoUri)
+  .then(() => console.log('MongoDB connected successfully'))
+  .catch((err) => console.error('MongoDB connection error:', err));
 
 // Basic route
 app.get('/', (req, res) => {
-    res.send('Todo API is running!');
+  res.send('Todo API is running!');
 });
 
 // TODO: Import and use todo routes here
 
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+  console.log(`Server running on port ${port}`);
 });
