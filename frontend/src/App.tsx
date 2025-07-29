@@ -31,9 +31,9 @@ function App() {
         <h1
           style={{ textAlign: 'center', color: '#333', marginBottom: '25px' }}
         >
-          My MERN Stack To-Do List
+          To-Do List
         </h1>
-        <TodoForm onAdd={addTodo} /> {/* Pass addTodo function to the form */}
+        <TodoForm onAdd={addTodo} /> {}
         <TodoList
           todos={todos}
           onToggle={toggleTodo}
@@ -41,7 +41,7 @@ function App() {
           loading={loading}
           error={error}
         />{' '}
-        {/* Pass data and functions to the list */}
+        {}
       </div>
     </div>
   );
