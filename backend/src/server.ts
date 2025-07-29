@@ -1,17 +1,18 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import cors from 'cors'; // For enabling cross-origin requests from your frontend
+import cors from 'cors';
+import todoRoutes from './routes/todos'; // <--- Make sure this line is here
 
-dotenv.config(); // Load environment variables from .env file
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5001;
-const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/todos_db';
+const mongoUri = process.env.MONGO_URI || 'mongodb://mongodb:27017/todos_db';
 
 // Middleware
-app.use(cors()); // Allow your frontend to talk to your backend
-app.use(express.json()); // To parse JSON bodies from requests
+app.use(cors());
+app.use(express.json());
 
 // Connect to MongoDB
 mongoose
@@ -19,12 +20,13 @@ mongoose
   .then(() => console.log('MongoDB connected successfully'))
   .catch((err) => console.error('MongoDB connection error:', err));
 
-// Basic route
+// Basic route (optional, but harmless to keep)
 app.get('/', (req, res) => {
   res.send('Todo API is running!');
 });
 
-// TODO: Import and use todo routes here
+// Use todo routes with /api/todos prefix
+app.use('/api/todos', todoRoutes); // <--- Make sure THIS LINE is here
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);

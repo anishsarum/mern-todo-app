@@ -1,13 +1,30 @@
 import { Request, Response } from 'express';
 import Todo, { ITodo } from '../models/Todo'; // Import our Todo model
 
+/**
+ * Extracts a user-friendly error message from an unknown error type.
+ * This helper centralizes error message handling.
+ */
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  // For cases where an error might be thrown as a string or other primitive
+  if (typeof error === 'string') {
+    return error;
+  }
+  return 'An unexpected error occurred.';
+};
+
 // Get all todos
 export const getTodos = async (req: Request, res: Response): Promise<void> => {
   try {
     const todos = await Todo.find(); // Find all documents in the 'todos' collection
     res.status(200).json(todos); // Send them back as JSON
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
+  } catch (error: unknown) {
+    // Changed from 'any' to 'unknown'
+    const message = getErrorMessage(error); // Use the helper
+    res.status(500).json({ message });
   }
 };
 
@@ -26,8 +43,10 @@ export const createTodo = async (
   try {
     const savedTodo = await newTodo.save(); // Save it to MongoDB
     res.status(201).json(savedTodo); // Send back the created todo with 201 status
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
+  } catch (error: unknown) {
+    // Changed from 'any' to 'unknown'
+    const message = getErrorMessage(error); // Use the helper
+    res.status(500).json({ message });
   }
 };
 
@@ -52,8 +71,10 @@ export const updateTodo = async (
 
     const updatedTodo = await todo.save(); // Save the updated todo
     res.status(200).json(updatedTodo);
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
+  } catch (error: unknown) {
+    // Changed from 'any' to 'unknown'
+    const message = getErrorMessage(error); // Use the helper
+    res.status(500).json({ message });
   }
 };
 
@@ -73,7 +94,9 @@ export const deleteTodo = async (
     }
 
     res.status(200).json({ message: 'Todo deleted successfully' });
-  } catch (error: any) {
-    res.status(500).json({ message: error.message });
+  } catch (error: unknown) {
+    // Changed from 'any' to 'unknown'
+    const message = getErrorMessage(error); // Use the helper
+    res.status(500).json({ message });
   }
 };
