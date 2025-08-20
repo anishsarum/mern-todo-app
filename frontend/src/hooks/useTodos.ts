@@ -1,3 +1,13 @@
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  if (typeof error === 'string') {
+    return error;
+  }
+  return 'An unexpected error occurred.';
+};
+
 import { useState, useEffect, useCallback } from 'react';
 import { ITodo } from '../types/todo.d';
 import {
@@ -18,8 +28,8 @@ export const useTodos = () => {
     try {
       const data = await getTodosApi();
       setTodos(data);
-    } catch (err: any) {
-      setError(err.message || 'Failed to fetch todos');
+    } catch (err: unknown) {
+      setError(getErrorMessage(err));
       console.error('Error fetching todos:', err);
     } finally {
       setLoading(false);
@@ -34,8 +44,8 @@ export const useTodos = () => {
     try {
       const newTodo = await createTodoApi(text);
       setTodos((prevTodos) => [...prevTodos, newTodo]);
-    } catch (err: any) {
-      setError(err.message || 'Failed to add todo');
+    } catch (err: unknown) {
+      setError(getErrorMessage(err));
       console.error('Error adding todo:', err);
     }
   }, []);
@@ -47,19 +57,17 @@ export const useTodos = () => {
           todo._id === id ? { ...todo, completed: !todo.completed } : todo
         )
       );
+      const originalTodos = todos;
+
       try {
-        const todoToUpdate = todos.find((todo) => todo._id === id);
+        const todoToUpdate = originalTodos.find((todo) => todo._id === id);
         if (todoToUpdate) {
           await updateTodoApi(id, { completed: !todoToUpdate.completed });
         }
-      } catch (err: any) {
-        setError(err.message || 'Failed to update todo');
+      } catch (err: unknown) {
+        setError(getErrorMessage(err));
         console.error('Error updating todo:', err);
-        setTodos((prevTodos) =>
-          prevTodos.map((todo) =>
-            todo._id === id ? { ...todo, completed: !todo.completed } : todo
-          )
-        );
+        setTodos(originalTodos);
       }
     },
     [todos]
@@ -67,16 +75,17 @@ export const useTodos = () => {
 
   const deleteTodo = useCallback(
     async (id: string) => {
+      const originalTodos = todos;
       setTodos((prevTodos) => prevTodos.filter((todo) => todo._id !== id));
       try {
         await deleteTodoApi(id);
-      } catch (err: any) {
-        setError(err.message || 'Failed to delete todo');
+      } catch (err: unknown) {
+        setError(getErrorMessage(err));
         console.error('Error deleting todo:', err);
-        fetchTodos();
+        setTodos(originalTodos);
       }
     },
-    [fetchTodos]
+    [todos]
   );
 
   return { todos, loading, error, addTodo, toggleTodo, deleteTodo, fetchTodos };
